@@ -1,0 +1,54 @@
+Compile the Zoltan libray (v3.6 or compatible version) in the
+$HOME/bin/Zoltan_v3.6/ folder.
+
+Place the following source code folders also in $HOME/bin/:
+
+analysator
+corsair
+pargrid
+rhybrid
+vlsv
+
+These are the following versions from repositories on
+https://github.com/fmihpc:
+
+analysator: 080dc7865b96c26a1daf3bce980b7d688c28f813
+corsair: 31646d4d082cce88613b218229189ea2cdf55725
+pargrid: f3d0c9ea45940905a5a47cf4d8008eeb83ec3bf7
+rhybrid: 1f05969ead9517b52f6fd3aa3dbc11b3f0e5a764
+vlsv: d05335293ffe4c5f2e3147ad89b8e84b101f13ff
+
+Edit vlsv/Makefile* files as necessary for your system and compile the
+VLSV library:
+
+cd $HOME/bin/vlsv/
+make
+
+Place the RHybrid files under the Corsair directory tree:
+
+mkdir $HOME/bin/corsair/src/user/rhybrid/
+cp -p $HOME/bin/rhybrid/src/* $HOME/bin/corsair/src/user/rhybrid/
+
+Det USE_DETECTORS := true in
+$HOME/bin/corsair/src/user/rhybrid/Makefile
+
+Edit corsair/Makefile* files as necessary for your system and compile
+the Corsair platform:
+
+cd $HOME/bin/corsair/
+make
+
+Perform runs with mpirun or the batch job system:
+
+mkdir mercury_run_grl_2022
+cd mercury_run_grl_2022
+cp -p ../../run_cfg_files/mercury.cfg ./
+cp -p ../../run_cfg_files/orbit_bc_mfb1.dat ./
+mpirun -np 2 ../corsair_rhybrid --runconfig mercury.cfg
+
+You can use the Analysator Python tool to examine the output files and
+explained in $HOME/bin/analysator/Documentation/ or use the VisIt
+(https://wci.llnl.gov/simulation/computer-codes/visit/) software
+plugin on $HOME/bin/vlsv/visit-plugin/.
+
+
